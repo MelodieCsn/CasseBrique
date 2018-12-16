@@ -1,0 +1,10 @@
+all : test-piece.o window.o brique.o balle.o
+	g++ -o Main $^ -lncurses
+test-piece.o : test-piece.cpp
+	g++ -o $@ -c $<
+window.o : window.cpp window.h
+	g++ -o $@ -c $<
+brique.o : brique.cpp brique.h
+	g++ -o $@ -c $<
+balle.o : balle.cpp balle.h
+	g++ -o $@ -c $<
