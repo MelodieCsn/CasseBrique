@@ -1,5 +1,6 @@
 #include "window.h"
 #include "balle.h"
+#include "raquette.h"
 #include <cstring>
 #include <unistd.h>
 
@@ -204,16 +205,10 @@ void myprogram(){
   infos.print(0,4,"Aide : 'H'");
   infos.print(0,5,"Quitter : 'Q'");
 
-  int x=plateau.getLargeur()/2,y=plateau.getHauteur()-2;
-  char p=' ';
-  Color col=WGREEN;
-  plateau.print(x-2,y,p,WRED);
-  plateau.print(x-1,y,p,col);
-  plateau.print(x,y,p,col);
-  plateau.print(x+1,y,p,col);
-  plateau.print(x+2,y,p,WRED);
+  raquette raq((plateau.getLargeur()/2)-(raq.getLenght()/2),plateau.getHauteur()-2, 5);
+  plateau.print(raq);
 
-  balle ball(x,y-1,3,"@");
+  balle ball(raq.getX()+(raq.getLenght()/2),raq.getY()-1,3,"@");
   plateau.print(ball);
 
   bool start=false;
@@ -239,12 +234,30 @@ void myprogram(){
       infos.print(8,1,itoa(score));
       break;
     case 'z':
-      balles-=1;
-      infos.print(11,2,itoa(balles));
-      start = false;
-      ball.setDir(3);
+      if(start){
+	balles-=1;
+	infos.print(11,2,itoa(balles));
+	
+	plateau.print(raq.getX(),raq.getY(),' ');
+	plateau.print(raq.getX()+1,raq.getY(),' ');
+	plateau.print(raq.getX()+2,raq.getY(),' ');
+	plateau.print(raq.getX()+3,raq.getY(),' ');
+	plateau.print(raq.getX()+4,raq.getY(),' ');
+	plateau.print(ball.getX(),ball.getY(),' ');
+
+	raq.setX((plateau.getLargeur()/2)-(raq.getLenght()/2));
+	plateau.print(raq);
+
+	ball.setX(raq.getX()+raq.getLenght()/2);
+	ball.setY(raq.getY()-1);
+	ball.setDir(3);
+	plateau.print(ball);
+	
+	start = false;
+      
       if(balles<0)
 	ch='q';
+      }
       break;
     case 's':
       for(int i=0;i<3;i++){
@@ -271,29 +284,23 @@ void myprogram(){
       break;
     case KEY_LEFT:
       if(!start){
-	plateau.print(x,y-1,' ');
-	ball.setX(x-1);
+	plateau.print(ball.getX(),ball.getY(),' ');
+	ball.setX(ball.getX()-1);
 	plateau.print(ball);
       }
-      plateau.print(x+2,y,' ');
-      plateau.print(--x,y,p,col);
-      plateau.print(x-1,y,p,col);
-      plateau.print(x-2,y,p,WRED);
-      plateau.print(x+1,y,p,col);
-      plateau.print(x+2,y,p,WRED);
+      plateau.print(raq.getX()+raq.getLenght()-1,raq.getY(),' ');
+      raq.setX(raq.getX()-1);
+      plateau.print(raq);
       break;
     case KEY_RIGHT:
       if(!start){
-	plateau.print(x,y-1,' ');
-	ball.setX(x+1);
+	plateau.print(ball.getX(),ball.getY(),' ');
+	ball.setX(ball.getX()+1);
 	plateau.print(ball);
       }
-      plateau.print(x-2,y,' ');
-      plateau.print(++x,y,p,col);
-      plateau.print(x-1,y,p,col);
-      plateau.print(x-2,y,p,WRED);
-      plateau.print(x+1,y,p,col);
-      plateau.print(x+2,y,p,WRED);
+      plateau.print(raq.getX(),raq.getY(),' ');
+      raq.setX(raq.getX()+1);
+      plateau.print(raq);
       break;
     }
   }while(ch != 'q');

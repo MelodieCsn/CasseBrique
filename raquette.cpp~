@@ -1,0 +1,14 @@
+#include "raquette.h"
+#include <iostream>
+#include <string>
+using namespace std;
+
+raquette::raquette(int x, int y, int l, char* c) : X(x), Y(y), lenght(l), ch(c){}
+
+int raquette::getX() const { return X; }
+int raquette::getY() const { return Y; }
+int raquette::getLenght() const { return lenght; }
+char* raquette::getCh() const { return ch; }
+
+void raquette::setX(unsigned int x) { X=x; }
+void raquette::setY(unsigned int y) { Y=y; }

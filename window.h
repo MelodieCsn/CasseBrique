@@ -6,6 +6,7 @@ extern "C" {
 }
 #include <string>
 #include "balle.h"
+#include "raquette.h"
 
 // Ensemble de couleurs possibles (fond+texte)
 enum Color {
@@ -59,6 +60,7 @@ class Window {
   void print(int x, int y, char s) const; 
 
   void print(balle ball) const;
+  void print(raquette raq) const;
   
   // accesseurs
   int getX() const;        // récupère l'abscisse du coin supérieur gauche de la fenêtre 

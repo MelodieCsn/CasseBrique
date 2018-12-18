@@ -96,10 +96,26 @@ void Window::print(balle ball) const {
   char* ch=ball.getCh();
   int x=ball.getX();
   int y=ball.getY();
-  wattron(win,WBLACK);
+  wattron(win,COLOR_PAIR(WBLACK));
   mvwprintw(win,y,x,ch);
-  wattroff(win,WBLACK);
+  wattroff(win,COLOR_PAIR(WBLACK));
   update();  
+}
+
+void Window::print(raquette raq) const {
+  char* ch=" ";
+  int x=raq.getX();
+  int y=raq.getY();
+  wattron(win,COLOR_PAIR(WRED));
+  mvwprintw(win,y,x,ch);
+  mvwprintw(win,y,x+raq.getLenght()-1,ch);
+  wattroff(win,COLOR_PAIR(WRED));
+  for(int i=x+1;i<x+raq.getLenght()-1;i++){
+    wattron(win,COLOR_PAIR(WGREEN));
+    mvwprintw(win,y,i,ch);
+    wattroff(win,COLOR_PAIR(WGREEN));
+    }
+  update();
 }
 
 
