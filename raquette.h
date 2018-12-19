@@ -7,7 +7,7 @@ class raquette {
  private :
  	int X ;
  	int Y ;
- 	int lenght;	
+ 	int length;	
 
  public:
 
@@ -15,7 +15,7 @@ class raquette {
 
  	int getX() const;
  	int getY() const;
- 	int getLenght() const;
+ 	int getLength() const;
 
  	void setX(unsigned int x);
 	void setY(unsigned int y);

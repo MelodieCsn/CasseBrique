@@ -108,9 +108,9 @@ void Window::print(raquette raq) const {
   int y=raq.getY();
   wattron(win,COLOR_PAIR(WRED));
   mvwprintw(win,y,x,ch);
-  mvwprintw(win,y,x+raq.getLenght()-1,ch);
+  mvwprintw(win,y,x+raq.getLength()-1,ch);
   wattroff(win,COLOR_PAIR(WRED));
-  for(int i=x+1;i<x+raq.getLenght()-1;i++){
+  for(int i=x+1;i<x+raq.getLength()-1;i++){
     wattron(win,COLOR_PAIR(WGREEN));
     mvwprintw(win,y,i,ch);
     wattroff(win,COLOR_PAIR(WGREEN));

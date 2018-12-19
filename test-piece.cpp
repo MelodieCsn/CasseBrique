@@ -25,20 +25,6 @@ char* itoa(int val){
   }
 }
 
-/*bool bord(int x, int y, Window& p){
-  
-  bool res = false;
-  if(x>=p.getX() && x<=p.getX()+p.getLargeur()){
-    if(y==p.getY() || y==p.getY()+p.getHauteur())
-      res = true;
-  }
-  if(y>p.getY() && y<p.getY()+p.getHauteur()){
-    if(x==p.getX() || x==p.getX()+p.getLargeur())
-      res = true;    
-  }
-  return res;
-  }*/
-
 bool bord(int x, int y, Window& p){
   
   bool res = false;
@@ -51,7 +37,40 @@ bool bord(int x, int y, Window& p){
       res = true;    
   }
   return res;
-  }
+}
+
+bool palette(int x, int y, raquette& raq){
+
+  bool res = false;
+  if(y==raq.getY() && x>=raq.getX() && x<=raq.getX()+raq.getLength()-1)
+    res = true;
+  return res;
+
+}
+
+bool bordPaletteG(int x, int y, raquette& raq){
+
+  bool res = false;
+  if(y==raq.getY() && x==raq.getX())
+    res = true;
+  return res;
+
+}
+
+bool bordPaletteD(int x, int y, raquette& raq){
+
+  bool res = false;
+  if(y==raq.getY() && x==raq.getX()+raq.getLength()-1)
+    res = true;
+  return res;
+
+}
+
+
+
+bool bloc(int x, int y, Window& p, raquette& raq){
+  return bord(x,y,p) || palette(x,y,raq);
+}
 
 void coin2(int k, int i, int j, balle& ball){
 
@@ -103,40 +122,66 @@ void coin2(int k, int i, int j, balle& ball){
 }
 
 
-void coin(int i, int j, balle& ball, Window& p){
+void coin(int i, int j, balle& ball, Window& p, raquette& raq){
   
   int x=ball.getX(), y=ball.getY();
-  if((bord(x+i,y,p) && bord(x,y+j,p)) || (bord(x+i,y+j,p) && !bord(x,y+j,p) && !bord(x+i,y,p)))
+  if((bloc(x+i,y,p,raq) && bloc(x,y+j,p,raq)) || (bloc(x+i,y+j,p,raq) && !bloc(x,y+j,p,raq) && !bloc(x+i,y,p,raq)))
     coin2(1,i,j,ball);
-  else if(bord(x,y+j,p))
+  else if(bloc(x,y+j,p,raq))
     coin2(2,i,j,ball);    
-  else if(bord(x+i,y,p))
+  else if(bloc(x+i,y,p,raq))
     coin2(3,i,j,ball);
     
 }
  
-void rebond(balle& ball, Window& p){
+void rebond(balle& ball, Window& p, raquette& raq){
   
   switch(ball.getDir()){
   case 1:
-    coin(-1,-1,ball,p);
+    coin(-1,-1,ball,p,raq);
     break;
   case 2:
-    if(bord(ball.getX(),ball.getY()-1,p))
+    if(bloc(ball.getX(),ball.getY()-1,p,raq))
       ball.setDir(5);
     break;
   case 3:
-    coin(1,-1,ball,p);
+    coin(1,-1,ball,p,raq);
     break;
   case 4:
-    coin(-1,1,ball,p);
+    if(bordPaletteD(ball.getX(),ball.getY()+1,raq))
+      ball.setDir(2);
+    else
+      coin(-1,1,ball,p,raq);
     break;
   case 5:
-    if(bord(ball.getX(),ball.getY()+1,p))
-      ball.setDir(2);
+    if(bloc(ball.getX(),ball.getY()+1,p,raq)){
+      
+      if(bordPaletteG(ball.getX(),ball.getY()+1,raq)){
+	
+	if(bord(ball.getX()-1,ball.getY(),p))
+	  ball.setDir(3);
+	else
+	  ball.setDir(1);
+
+      }
+      
+      else if(bordPaletteD(ball.getX(),ball.getY()+1,raq)){
+	
+	if(bord(ball.getX()+1,ball.getY(),p))
+	  ball.setDir(1);
+	else
+	  ball.setDir(3);
+	
+      }
+      else
+	ball.setDir(2);
+    }
     break;
   case 6:
-    coin(1,1,ball,p);
+    if(bordPaletteG(ball.getX(),ball.getY()+1,raq))
+      ball.setDir(2);
+    else
+      coin(1,1,ball,p,raq);
     break;
 
    }
@@ -205,10 +250,10 @@ void myprogram(){
   infos.print(0,4,"Aide : 'H'");
   infos.print(0,5,"Quitter : 'Q'");
 
-  raquette raq((plateau.getLargeur()/2)-(raq.getLenght()/2),plateau.getHauteur()-2, 5);
+  raquette raq((plateau.getLargeur()/2)-(raq.getLength()/2),plateau.getHauteur()-2, 5);
   plateau.print(raq);
 
-  balle ball(raq.getX()+(raq.getLenght()/2),raq.getY()-1,3,"@");
+  balle ball(raq.getX()+(raq.getLength()/2),raq.getY()-1,2,"@");
   plateau.print(ball);
 
   bool start=false;
@@ -217,7 +262,7 @@ void myprogram(){
     if(start){
     usleep(50000);
     plateau.print(ball.getX(),ball.getY(),' ');
-    rebond(ball,plateau);
+    rebond(ball,plateau,raq);
     ball.update();
     plateau.print(ball);
     }
@@ -245,10 +290,10 @@ void myprogram(){
 	plateau.print(raq.getX()+4,raq.getY(),' ');
 	plateau.print(ball.getX(),ball.getY(),' ');
 
-	raq.setX((plateau.getLargeur()/2)-(raq.getLenght()/2));
+	raq.setX((plateau.getLargeur()/2)-(raq.getLength()/2));
 	plateau.print(raq);
 
-	ball.setX(raq.getX()+raq.getLenght()/2);
+	ball.setX(raq.getX()+raq.getLength()/2);
 	ball.setY(raq.getY()-1);
 	ball.setDir(3);
 	plateau.print(ball);
@@ -283,24 +328,28 @@ void myprogram(){
       aide.setCouleurBordure(BBLACK);
       break;
     case KEY_LEFT:
-      if(!start){
-	plateau.print(ball.getX(),ball.getY(),' ');
-	ball.setX(ball.getX()-1);
-	plateau.print(ball);
+      if(raq.getX()>0){
+	if(!start){
+	  plateau.print(ball.getX(),ball.getY(),' ');
+	  ball.setX(ball.getX()-1);
+	  plateau.print(ball);
+	}
+	plateau.print(raq.getX()+raq.getLength()-1,raq.getY(),' ');
+	raq.setX(raq.getX()-1);
+	plateau.print(raq);
       }
-      plateau.print(raq.getX()+raq.getLenght()-1,raq.getY(),' ');
-      raq.setX(raq.getX()-1);
-      plateau.print(raq);
       break;
     case KEY_RIGHT:
-      if(!start){
-	plateau.print(ball.getX(),ball.getY(),' ');
-	ball.setX(ball.getX()+1);
-	plateau.print(ball);
-      }
-      plateau.print(raq.getX(),raq.getY(),' ');
-      raq.setX(raq.getX()+1);
-      plateau.print(raq);
+      if(raq.getX()+raq.getLength()<plateau.getLargeur()){
+	if(!start){
+	  plateau.print(ball.getX(),ball.getY(),' ');
+	  ball.setX(ball.getX()+1);
+	  plateau.print(ball);
+	}
+	plateau.print(raq.getX(),raq.getY(),' ');
+	raq.setX(raq.getX()+1);
+	plateau.print(raq);
+    }
       break;
     }
   }while(ch != 'q');
