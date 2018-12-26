@@ -1,0 +1,183 @@
+#include "terrain.h"
+using namespace std;
+
+Terrain::Terrain() : win(21,41,1,4), raq(win.getWidth()/2-raq.getLength()/2,win.getHeight()-2,5), ball(raq.getX()+raq.getLength()/2,raq.getY()-1,2), i(0){}
+
+Window& Terrain::getWin() { return win; }
+Raquette& Terrain::getRaq() { return raq; }
+Balle& Terrain::getBall() { return ball; }
+
+int Terrain::getI() const { return i; }
+void Terrain::upI() { i++; }
+
+void Terrain::addBrique(Brique& br){
+
+  T.push_back(br);
+  upI();
+
+}
+
+
+
+
+
+bool Terrain::bord(int X, int Y){
+  
+  bool res = false;
+  if(X>=-1 && X<=win.getWidth()){
+    if(Y==-1 || Y==win.getHeight())
+      res = true;
+  }
+  if(Y>=-1 && Y<=win.getHeight()){
+    if(X==-1 || X==win.getWidth())
+      res = true;    
+  }
+  return res;
+  
+}
+
+bool Terrain::palette(int X, int Y, Raquette& r){
+  return (Y==r.getY() && X>=r.getX() && X<=r.getX()+r.getLength()-1);
+}
+  
+bool Terrain::bordPaletteG(int X, int Y, Raquette& r){
+  return (Y==r.getY() && X==r.getX());
+}
+  
+bool Terrain::bordPaletteD(int X, int Y, Raquette& r){
+  return (Y==r.getY() && X==r.getX()+r.getLength()-1);
+}
+  
+bool Terrain::bloc(int X, int Y, Window& w, Raquette& r){
+  return (bord(X,Y) || palette(X,Y,r));
+}
+
+void Terrain::coin2(int k, int i, int j, Balle& b){
+
+  switch(k){
+  case 1:
+    
+    if(i==1)
+      if(j==1)
+	b.setDir(1);
+      else
+	b.setDir(4);
+    else
+      if(j==1)
+	b.setDir(3);
+      else
+	b.setDir(6);
+    
+    break;
+  case 2:
+
+    if(i==1)
+      if(j==1)
+	b.setDir(3);
+      else
+	b.setDir(6);
+    else
+      if(j==1)
+	b.setDir(1);
+      else
+	b.setDir(4);
+
+    break;
+  case 3:
+
+    if(i==1)
+      if(j==1)
+	b.setDir(4);
+      else
+	b.setDir(1);
+    else
+      if(j==1)
+	b.setDir(6);
+      else
+	b.setDir(3);
+
+    break;
+  }
+  
+}
+  
+void Terrain::coin(int i, int j, Balle& b, Window& w, Raquette& r){
+  
+  int X=b.getX(), Y=b.getY();
+  if((bloc(X+i,Y,w,r) && bloc(X,Y+j,w,r)) || (bloc(X+i,Y+j,w,r) && !bloc(X,Y+j,w,r) && !bloc(X+i,Y,w,r)))
+    coin2(1,i,j,b);
+  else if(bloc(X,Y+j,w,r))
+    coin2(2,i,j,b);    
+  else if(bloc(X+i,Y,w,r))
+    coin2(3,i,j,b);
+    
+}
+  
+void Terrain::rebond(Balle& b, Window& w, Raquette& r){
+  
+  switch(b.getDir()){
+  case 1:
+    coin(-1,-1,b,w,r);
+    break;
+  case 2:
+    if(bloc(b.getX(),b.getY()-1,w,r))
+      b.setDir(5);
+    break;
+  case 3:
+    coin(1,-1,b,w,r);
+    break;
+  case 4:
+    if(bordPaletteD(b.getX(),b.getY()+1,r))
+      b.setDir(2);
+    else
+      coin(-1,1,b,w,r);
+    break;
+  case 5:
+    if(bloc(b.getX(),b.getY()+1,w,r)){
+      
+      if(bordPaletteG(b.getX(),b.getY()+1,r)){
+	
+	if(bord(b.getX()-1,b.getY()))
+	  b.setDir(3);
+	else
+	  b.setDir(1);
+
+      }
+      
+      else if(bordPaletteD(b.getX(),b.getY()+1,r)){
+	
+	if(bord(b.getX()+1,b.getY()))
+	  b.setDir(1);
+	else
+	  b.setDir(3);
+	
+      }
+      else
+	b.setDir(2);
+    }
+    break;
+  case 6:
+    if(bordPaletteG(b.getX(),b.getY()+1,r))
+      b.setDir(2);
+    else
+      coin(1,1,b,w,r);
+    break;
+
+   }
+}
+
+/* 
+
+xx ox xo
+x  x  o
+
+xx ox
+o  o
+
+xo oo
+x  x
+
+oo
+o
+
+*/

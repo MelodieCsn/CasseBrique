@@ -1,27 +1,23 @@
 #ifndef __BALLE_H
 #define __BALLE_H
 
-class balle{
+class Balle{
  private :
-  int X;
-  int Y;
+  int x;
+  int y;
   int dir;
-  char* ch;
 
  public :
-  balle(int x, int y, int d, char* c);
+  Balle(int X, int Y, int d);
   
   int getX() const;
   int getY() const;
   int getDir() const;
-  char* getCh() const;
 
-  void setX(int x);
-  void setY(int y);
+  void setX(int X);
+  void setY(int Y);
   void setDir(int d);
-  void setCh(char* c);
 
-  //void printBalle() const;
   void update();
 
 };

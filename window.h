@@ -5,6 +5,7 @@ extern "C" {
 #include <curses.h>
 }
 #include <string>
+#include "brique.h"
 #include "balle.h"
 #include "raquette.h"
 
@@ -59,14 +60,15 @@ class Window {
   void print(int x, int y, std::string s) const;
   void print(int x, int y, char s) const; 
 
-  void print(balle ball) const;
-  void print(raquette raq) const;
+  void print(Balle ball) const;
+  void print(Raquette raq) const;
+  void print(Brique br) const;
   
   // accesseurs
   int getX() const;        // récupère l'abscisse du coin supérieur gauche de la fenêtre 
   int getY() const;        // récupère l'ordonnée du coin supérieur gauche de la fenêtre 
-  int getHauteur() const ; // récupère la hauteur de la fenêtre
-  int getLargeur() const ; // récupère la largeur de la fenêtre
+  int getHeight() const ; // récupère la hauteur de la fenêtre
+  int getWidth() const ; // récupère la largeur de la fenêtre
 
   Color getCouleurBordure() const; // récupère la couleur de la bordure
   Color getCouleurFenetre() const; // récupère la couleur de la fenêtre

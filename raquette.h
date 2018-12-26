@@ -2,23 +2,22 @@
 #define _RAQUETTE_H
 using namespace std;
 
-class raquette {
+class Raquette {
 
  private :
- 	int X ;
- 	int Y ;
+ 	int x ;
+ 	int y ;
  	int length;	
 
  public:
 
- 	raquette(int x, int y, int l); 
+ 	Raquette(int X, int Y, int l); 
 
  	int getX() const;
  	int getY() const;
  	int getLength() const;
 
- 	void setX(unsigned int x);
-	void setY(unsigned int y);
+ 	void setX(int X);
 
 };
 

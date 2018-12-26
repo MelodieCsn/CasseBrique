@@ -1,0 +1,48 @@
+#ifndef __TERRAIN_H
+#define __TERRAIN_H
+
+#include "window.h"
+#include "raquette.h"
+#include "balle.h"
+#include "tableau_brique.h"
+#include "brique.h"
+
+class Terrain{
+
+ private:
+
+  Window win;
+  Raquette raq;
+  Balle ball;
+  
+  int i;
+  TableauBrique T;
+
+ public:
+
+  Terrain();
+
+  Window& getWin();
+  Raquette& getRaq();
+  Balle& getBall();
+  
+  int getI() const;
+  void upI();
+
+  void addBrique(Brique& br);
+
+  bool bord(int X, int Y);
+  
+  bool palette(int X, int Y, Raquette& r);
+  bool bordPaletteG(int X, int Y, Raquette& r);
+  bool bordPaletteD(int X, int Y, Raquette& r);
+
+  bool bloc(int X, int Y, Window& w, Raquette& r);
+
+  void coin2(int k, int i, int j, Balle& b);
+  void coin(int i, int j, Balle& b, Window& w, Raquette& r);
+
+  void rebond(Balle& b, Window& w, Raquette& r);
+};
+
+#endif

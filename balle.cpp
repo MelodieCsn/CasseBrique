@@ -3,72 +3,39 @@
 #include <string>
 using namespace std;
 
-balle::balle(int x, int y, int d, char* c) : X(x), Y(y), dir(d), ch(c){}
+Balle::Balle(int X, int Y, int d) : x(X), y(Y), dir(d){}
 
-int balle::getX() const{ return X; }
-int balle::getY() const{ return Y; }
-int balle::getDir() const{ return dir; }
-char* balle::getCh() const{ return ch; }
+int Balle::getX() const{ return x; }
+int Balle::getY() const{ return y; }
+int Balle::getDir() const{ return dir; }
 
-void balle::setX(int x){ X=x; }
-void balle::setY(int y){ Y=y; }
-void balle::setDir(int d){ dir=d; }
-void balle::setCh(char* c){ ch=c; }
-
-/*void balle::printBalle() const{
-  cout<<"=============================="<<endl;
-  for(int i=0;i<Y;i++)
-    cout<<' '<<endl;
-  for(int j=0;j<X;j++)
-    cout<<' ';
-  cout<<'@'<<endl;
-  cout<<"=============================="<<endl;
-  }*/
+void Balle::setX(int X){ x=X; }
+void Balle::setY(int Y){ y=Y; }
+void Balle::setDir(int d){ dir=d; }
   
-void balle::update(){
+void Balle::update(){
   switch(dir){
   case 1:
-    X--;
-    Y--;
+    x--;
+    y--;
     break;
   case 2:
-    Y--;
+    y--;
     break;
   case 3:
-    X++;
-    Y--;
+    x++;
+    y--;
     break;
   case 4:
-    X--;
-    Y++;
+    x--;
+    y++;
     break;
   case 5:
-    Y++;
+    y++;
     break;
   case 6:
-    X++;
-    Y++;
+    x++;
+    y++;
     break;
   }
 }
-
-/*int main(){
-  balle b(0,0,6);
-  b.printBalle();
-  
-  b.update();
-  b.printBalle();
-  b.update();
-  b.printBalle();
-  b.update();
-  b.printBalle();
-  
-  b.changeDir(3);
-
-  b.update();
-  b.printBalle();
-  b.update();
-  b.printBalle();
-
-  return 0;
-  }*/

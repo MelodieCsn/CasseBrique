@@ -51,15 +51,15 @@ Window::Window(int h,int w, int x, int y, char c)
   : height(h), width(w), startx(x), starty(y), bord(c)
 {
   colorwin=WBLACK;
-  colorframe=WBLUE;
+  colorframe=WGREEN;
   frame=newwin(h+2,w+2,y,x);
   win=subwin(frame,h,w,y+1,x+1);
   wbkgd(frame,COLOR_PAIR(colorframe));
   wbkgd(win,COLOR_PAIR(colorwin));
-  wborder(frame, c,c,c,c,c,c,c,c);
-  wattron(win,COLOR_PAIR(colorwin));
   wattron(frame,COLOR_PAIR(colorframe));
+  wattron(win,COLOR_PAIR(colorwin));
   update();
+  wborder(frame,c,c,c,c,c,c,c,c);
 }
 
 Window::~Window(){
@@ -92,8 +92,8 @@ void Window::print(int x, int y, char s) const{
   update();  
 }
 
-void Window::print(balle ball) const {
-  char* ch=ball.getCh();
+void Window::print(Balle ball) const {
+  char* ch="@";
   int x=ball.getX();
   int y=ball.getY();
   wattron(win,COLOR_PAIR(WBLACK));
@@ -102,7 +102,7 @@ void Window::print(balle ball) const {
   update();  
 }
 
-void Window::print(raquette raq) const {
+void Window::print(Raquette raq) const {
   char* ch=" ";
   int x=raq.getX();
   int y=raq.getY();
@@ -118,11 +118,41 @@ void Window::print(raquette raq) const {
   update();
 }
 
+void Window::print(Brique br) const {
+    char* ch=" ";
+    int x=br.getX();
+    int y=br.getY();
+    Color col;
+    switch(br.getPv()){
+    case 1:
+      col = WRED;
+      break;
+    case 2:
+      col = WYELLOW;
+      break;
+    case 3:
+      col = WGREEN;
+      break;
+    case 4:
+    col = WBLUE;
+    break;
+    case 5:
+      col = WMAGENTA;
+      break;
+    }
+    wattron(win,COLOR_PAIR(col));
+    mvwprintw(win,y,x,ch);
+    wattroff(win,COLOR_PAIR(col));
+    update();  
+  }
+
+
+
 
 int Window::getX() const { return startx;} 
 int Window::getY() const { return starty;} 
-int Window::getHauteur() const { return height;} 
-int Window::getLargeur() const { return width;}  
+int Window::getHeight() const { return height;} 
+int Window::getWidth() const { return width;}  
 Color Window::getCouleurBordure() const{ return colorframe;}
 Color Window::getCouleurFenetre() const{ return colorwin;}
 void Window::setCouleurBordure(Color c){

@@ -1,4 +1,7 @@
 #include "window.h"
+#include "terrain.h"
+#include "tableau_brique.h"
+#include "brique.h"
 #include "balle.h"
 #include "raquette.h"
 #include <cstring>
@@ -25,197 +28,39 @@ char* itoa(int val){
   }
 }
 
-bool bord(int x, int y, Window& p){
-  
-  bool res = false;
-  if(x>=-1 && x<=p.getLargeur()){
-    if(y==-1 || y==p.getHauteur())
-      res = true;
-  }
-  if(y>=-1 && y<=p.getHauteur()){
-    if(x==-1 || x==p.getLargeur())
-      res = true;    
-  }
-  return res;
-}
-
-bool palette(int x, int y, raquette& raq){
-
-  bool res = false;
-  if(y==raq.getY() && x>=raq.getX() && x<=raq.getX()+raq.getLength()-1)
-    res = true;
-  return res;
-
-}
-
-bool bordPaletteG(int x, int y, raquette& raq){
-
-  bool res = false;
-  if(y==raq.getY() && x==raq.getX())
-    res = true;
-  return res;
-
-}
-
-bool bordPaletteD(int x, int y, raquette& raq){
-
-  bool res = false;
-  if(y==raq.getY() && x==raq.getX()+raq.getLength()-1)
-    res = true;
-  return res;
-
-}
-
-
-
-bool bloc(int x, int y, Window& p, raquette& raq){
-  return bord(x,y,p) || palette(x,y,raq);
-}
-
-void coin2(int k, int i, int j, balle& ball){
-
-  switch(k){
-  case 1:
-    
-    if(i==1)
-      if(j==1)
-	ball.setDir(1);
-      else
-	ball.setDir(4);
-    else
-      if(j==1)
-	ball.setDir(3);
-      else
-	ball.setDir(6);
-    
-    break;
-  case 2:
-
-    if(i==1)
-      if(j==1)
-	ball.setDir(3);
-      else
-	ball.setDir(6);
-    else
-      if(j==1)
-	ball.setDir(1);
-      else
-	ball.setDir(4);
-
-    break;
-  case 3:
-
-    if(i==1)
-      if(j==1)
-	ball.setDir(4);
-      else
-	ball.setDir(1);
-    else
-      if(j==1)
-	ball.setDir(6);
-      else
-	ball.setDir(3);
-
-    break;
-  }
-  
-}
-
-
-void coin(int i, int j, balle& ball, Window& p, raquette& raq){
-  
-  int x=ball.getX(), y=ball.getY();
-  if((bloc(x+i,y,p,raq) && bloc(x,y+j,p,raq)) || (bloc(x+i,y+j,p,raq) && !bloc(x,y+j,p,raq) && !bloc(x+i,y,p,raq)))
-    coin2(1,i,j,ball);
-  else if(bloc(x,y+j,p,raq))
-    coin2(2,i,j,ball);    
-  else if(bloc(x+i,y,p,raq))
-    coin2(3,i,j,ball);
-    
-}
- 
-void rebond(balle& ball, Window& p, raquette& raq){
-  
-  switch(ball.getDir()){
-  case 1:
-    coin(-1,-1,ball,p,raq);
-    break;
-  case 2:
-    if(bloc(ball.getX(),ball.getY()-1,p,raq))
-      ball.setDir(5);
-    break;
-  case 3:
-    coin(1,-1,ball,p,raq);
-    break;
-  case 4:
-    if(bordPaletteD(ball.getX(),ball.getY()+1,raq))
-      ball.setDir(2);
-    else
-      coin(-1,1,ball,p,raq);
-    break;
-  case 5:
-    if(bloc(ball.getX(),ball.getY()+1,p,raq)){
-      
-      if(bordPaletteG(ball.getX(),ball.getY()+1,raq)){
-	
-	if(bord(ball.getX()-1,ball.getY(),p))
-	  ball.setDir(3);
-	else
-	  ball.setDir(1);
-
-      }
-      
-      else if(bordPaletteD(ball.getX(),ball.getY()+1,raq)){
-	
-	if(bord(ball.getX()+1,ball.getY(),p))
-	  ball.setDir(1);
-	else
-	  ball.setDir(3);
-	
-      }
-      else
-	ball.setDir(2);
-    }
-    break;
-  case 6:
-    if(bordPaletteG(ball.getX(),ball.getY()+1,raq))
-      ball.setDir(2);
-    else
-      coin(1,1,ball,p,raq);
-    break;
-
-   }
-}
-
-
-/* 
-
-xx ox xo
-x  x  o
-
-xx ox
-o  o
-
-xo oo
-x  x
-
-oo
-o
-
-*/
-
-
 void myprogram(){
   int ch;
   int lvl=1;
   int score=0;
   int balles=3;
+  
+  Terrain plateau;
 
-  Window plateau(21,41,1,4,' ');
-  Window infos(6,13,plateau.getLargeur()+7,5,' ');
-  Window titre(1,12,((plateau.getLargeur()+infos.getLargeur()+9)/2)-7,0,' ');
-  Window aide(10,60,1,(plateau.getHauteur()+titre.getHauteur()+6),' ');
-  Window lvlup(2,13,infos.getX(),infos.getY()+infos.getHauteur()+3,' ');
+  Brique b1(3,5,1);
+  Brique b2(4,5,2);
+  Brique b3(5,5,3);
+  Brique b4(6,5,4);
+  Brique b5(20,5,5);
+
+  plateau.addBrique(b1);
+  plateau.addBrique(b2);
+  plateau.addBrique(b3);
+  plateau.addBrique(b4);
+  plateau.addBrique(b5);
+  
+  /*plateau.addBrique(2,5,0);
+  plateau.addBrique(3,5,1);
+  plateau.addBrique(4,5,2);
+  plateau.addBrique(5,5,3);
+  plateau.addBrique(6,5,4);
+  plateau.addBrique(7,5,5);*/
+
+  plateau.print();
+  
+  Window infos(6,13,plateau.getWin().getWidth()+7,5,' ');
+  Window titre(1,12,((plateau.getWin().getWidth()+infos.getWidth()+9)/2)-7,0,' ');
+  Window lvlup(2,13,infos.getX(),infos.getY()+infos.getHeight()+3,' ');
+  Window aide(10,60,1,max(plateau.getWin().getY()+plateau.getWin().getHeight()+3,infos.getY()+infos.getHeight()+3),' ');
 
   aide.print(0,0,"Bienvenue dans l'aide ! Appuyez sur 'H' pour revenir au jeu.");
   aide.print(0,2,"But du jeu : Casser toutes les briques a l'aide de la balle.");
@@ -234,8 +79,6 @@ void myprogram(){
   lvlup.setCouleurBordure(BBLACK);
 			 
   titre.setCouleurBordure(BRED);
-  plateau.setCouleurBordure(BGREEN);
-  plateau.setCouleurFenetre(WBLUE);
   infos.setCouleurBordure(BMAGENTA);
   infos.setCouleurFenetre(WMAGENTA);
   
@@ -249,30 +92,21 @@ void myprogram(){
   infos.print(11,2,itoa(balles));
   infos.print(0,4,"Aide : 'H'");
   infos.print(0,5,"Quitter : 'Q'");
-
-  raquette raq((plateau.getLargeur()/2)-(raq.getLength()/2),plateau.getHauteur()-2, 5);
-  plateau.print(raq);
-
-  balle ball(raq.getX()+(raq.getLength()/2),raq.getY()-1,2,"@");
-  plateau.print(ball);
-
+  
   bool start=false;
   
   do{
     if(start){
     usleep(50000);
-    plateau.print(ball.getX(),ball.getY(),' ');
-    rebond(ball,plateau,raq);
-    ball.update();
-    plateau.print(ball);
+    plateau.getWin().print(plateau.getBall().getX(),plateau.getBall().getY(),' ');
+    plateau.rebond();
+    plateau.getBall().update();
+    plateau.print();
     }
     ch = getch();
     switch (ch) {
     case ' ':
       start = true;
-      break;
-    case 'r':
-      infos.print(8,1,itoa(ball.getY()));
       break;
     case 'a':
       score+=1;
@@ -283,20 +117,16 @@ void myprogram(){
 	balles-=1;
 	infos.print(11,2,itoa(balles));
 	
-	plateau.print(raq.getX(),raq.getY(),' ');
-	plateau.print(raq.getX()+1,raq.getY(),' ');
-	plateau.print(raq.getX()+2,raq.getY(),' ');
-	plateau.print(raq.getX()+3,raq.getY(),' ');
-	plateau.print(raq.getX()+4,raq.getY(),' ');
-	plateau.print(ball.getX(),ball.getY(),' ');
+	plateau.getWin().print(plateau.getRaq().getX(),plateau.getRaq().getY(),"     ");
+	plateau.getWin().print(plateau.getBall().getX(),plateau.getBall().getY(),' ');
 
-	raq.setX((plateau.getLargeur()/2)-(raq.getLength()/2));
-	plateau.print(raq);
+	plateau.getRaq().setX((plateau.getWin().getWidth()/2)-(plateau.getRaq().getLength()/2));
+	plateau.getWin().print(plateau.getRaq());
 
-	ball.setX(raq.getX()+raq.getLength()/2);
-	ball.setY(raq.getY()-1);
-	ball.setDir(3);
-	plateau.print(ball);
+	plateau.getBall().setX(plateau.getRaq().getX()+plateau.getRaq().getLength()/2);
+	plateau.getBall().setY(plateau.getRaq().getY()-1);
+	plateau.getBall().setDir(2);
+	plateau.getWin().print(plateau.getBall());
 	
 	start = false;
       
@@ -319,6 +149,20 @@ void myprogram(){
       infos.print(11,2,itoa(balles));
       lvlup.setCouleurFenetre(BBLACK);
       lvlup.setCouleurBordure(BBLACK);
+
+      plateau.getWin().print(plateau.getRaq().getX(),plateau.getRaq().getY(),"     ");
+      plateau.getWin().print(plateau.getBall().getX(),plateau.getBall().getY(),' ');
+      
+      plateau.getRaq().setX((plateau.getWin().getWidth()/2)-(plateau.getRaq().getLength()/2));
+      plateau.getWin().print(plateau.getRaq());
+      
+      plateau.getBall().setX(plateau.getRaq().getX()+plateau.getRaq().getLength()/2);
+      plateau.getBall().setY(plateau.getRaq().getY()-1);
+      plateau.getBall().setDir(2);
+      plateau.getWin().print(plateau.getBall());
+      
+      start = false;
+	
       break;
     case 'h':
       aide.setCouleurFenetre(BYELLOW);
@@ -328,27 +172,27 @@ void myprogram(){
       aide.setCouleurBordure(BBLACK);
       break;
     case KEY_LEFT:
-      if(raq.getX()>0){
+      if(plateau.getRaq().getX()>0){
 	if(!start){
-	  plateau.print(ball.getX(),ball.getY(),' ');
-	  ball.setX(ball.getX()-1);
-	  plateau.print(ball);
+	  plateau.getWin().print(plateau.getBall().getX(),plateau.getBall().getY(),' ');
+	  plateau.getBall().setX(plateau.getBall().getX()-1);
+	  plateau.getWin().print(plateau.getBall());
 	}
-	plateau.print(raq.getX()+raq.getLength()-1,raq.getY(),' ');
-	raq.setX(raq.getX()-1);
-	plateau.print(raq);
+	plateau.getWin().print(plateau.getRaq().getX()+plateau.getRaq().getLength()-1,plateau.getRaq().getY(),' ');
+	plateau.getRaq().setX(plateau.getRaq().getX()-1);
+	plateau.getWin().print(plateau.getRaq());
       }
       break;
     case KEY_RIGHT:
-      if(raq.getX()+raq.getLength()<plateau.getLargeur()){
+      if(plateau.getRaq().getX()+plateau.getRaq().getLength()<plateau.getWin().getWidth()){
 	if(!start){
-	  plateau.print(ball.getX(),ball.getY(),' ');
-	  ball.setX(ball.getX()+1);
-	  plateau.print(ball);
+	  plateau.getWin().print(plateau.getBall().getX(),plateau.getBall().getY(),' ');
+	  plateau.getBall().setX(plateau.getBall().getX()+1);
+	  plateau.getWin().print(plateau.getBall());
 	}
-	plateau.print(raq.getX(),raq.getY(),' ');
-	raq.setX(raq.getX()+1);
-	plateau.print(raq);
+	plateau.getWin().print(plateau.getRaq().getX(),plateau.getRaq().getY(),' ');
+	plateau.getRaq().setX(plateau.getRaq().getX()+1);
+	plateau.getWin().print(plateau.getRaq());
     }
       break;
     }
@@ -356,7 +200,7 @@ void myprogram(){
   
   if(balles<0){
     
-    Window GO(1,11,plateau.getLargeur()/2-4,4+plateau.getHauteur()/2,' ');
+    Window GO(1,11,plateau.getWin().getWidth()/2-4,4+plateau.getWin().getHeight()/2,' ');
       GO.setCouleurFenetre(BBLACK);
       GO.setCouleurBordure(BBLACK);
     GO.print(0,0,"GAME OVER !");
