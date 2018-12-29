@@ -32,7 +32,6 @@ void myprogram(){
   int ch;
   int lvl=1;
   int score=0;
-  int balles=3;
   
   Terrain plateau;
 
@@ -47,29 +46,32 @@ void myprogram(){
   plateau.addBrique(b3);
   plateau.addBrique(b4);
   plateau.addBrique(b5);
-  
-  /*plateau.addBrique(2,5,0);
-  plateau.addBrique(3,5,1);
-  plateau.addBrique(4,5,2);
-  plateau.addBrique(5,5,3);
-  plateau.addBrique(6,5,4);
-  plateau.addBrique(7,5,5);*/
 
   plateau.print();
   
   Window infos(6,13,plateau.getWin().getWidth()+7,5,' ');
-  Window titre(1,12,((plateau.getWin().getWidth()+infos.getWidth()+9)/2)-7,0,' ');
+  Window titre(1,12,((plateau.getWin().getWidth()+13+9)/2)-7,0,' ');
   Window lvlup(2,13,infos.getX(),infos.getY()+infos.getHeight()+3,' ');
   Window aide(10,60,1,max(plateau.getWin().getY()+plateau.getWin().getHeight()+3,infos.getY()+infos.getHeight()+3),' ');
 
-  aide.print(0,0,"Bienvenue dans l'aide ! Appuyez sur 'H' pour revenir au jeu.");
+  /* aide.print(0,0,"Bienvenue dans l'aide ! Appuyez sur 'H' pour revenir au jeu.");
   aide.print(0,2,"But du jeu : Casser toutes les briques a l'aide de la balle.");
   aide.print(0,3,"             Vous perdez une vie quand la balle touche le");
   aide.print(0,4,"             bord inferieur, en dessous de 0, c'est fini !");
   aide.print(0,6,"Commandes : < : Deplacer la palette d'une case a gauche.");
   aide.print(0,7,"            > : Deplacer la palette d'une case a gauche.");
   aide.print(0,8,"            SPACE : Tirer la balle au debut du niveau");
-  aide.print(0,9,"                    ou apres avoir perdu une vie.");
+  aide.print(0,9,"                    ou apres avoir perdu une vie.");*/
+
+  aide.print(0,0,"Bienvenue dans l'aide ! Appuyez sur 'H' pour revenir au jeu.\n\
+But du jeu : Casser toutes les briques a l'aide de la balle.\
+             Vous perdez une vie quand la balle touche le\n\
+             bord inferieur, en dessous de 0, c'est fini !\n\n\
+Commandes : < : Deplacer la palette d'une case a gauche.\n\
+            > : Deplacer la palette d'une case a gauche.\n\
+            SPACE : Tirer la balle au debut du niveau\n\
+                    ou apres avoir perdu une vie.");
+  
   aide.setCouleurFenetre(BBLACK);
   aide.setCouleurBordure(BBLACK);
 
@@ -83,13 +85,13 @@ void myprogram(){
   infos.setCouleurFenetre(WMAGENTA);
   
   titre.print(0,0,"Casse-Brique",WRED);
-  
+
   infos.print(0,0,"Niveau : ");
   infos.print(9,0,itoa(lvl));
   infos.print(0,1,"Score : ");
   infos.print(8,1,itoa(score));
   infos.print(0,2,"Balle(s) : ");
-  infos.print(11,2,itoa(balles));
+  infos.print(11,2,itoa(plateau.getBall().getNb()));
   infos.print(0,4,"Aide : 'H'");
   infos.print(0,5,"Quitter : 'Q'");
   
@@ -108,14 +110,17 @@ void myprogram(){
     case ' ':
       start = true;
       break;
+    case 'r':
+      titre.setPos(5,5);
+      break;
     case 'a':
       score+=1;
       infos.print(8,1,itoa(score));
       break;
     case 'z':
       if(start){
-	balles-=1;
-	infos.print(11,2,itoa(balles));
+	plateau.getBall().setNb(plateau.getBall().getNb()-1);
+	infos.print(11,2,itoa(plateau.getBall().getNb()));
 	
 	plateau.getWin().print(plateau.getRaq().getX(),plateau.getRaq().getY(),"     ");
 	plateau.getWin().print(plateau.getBall().getX(),plateau.getBall().getY(),' ');
@@ -130,7 +135,7 @@ void myprogram(){
 	
 	start = false;
       
-      if(balles<0)
+      if(plateau.getBall().getNb()<0)
 	ch='q';
       }
       break;
@@ -145,8 +150,8 @@ void myprogram(){
       }
       lvl+=1;
       infos.print(9,0,itoa(lvl));
-      balles+=1;
-      infos.print(11,2,itoa(balles));
+      plateau.getBall().setNb(plateau.getBall().getNb()+1);
+      infos.print(11,2,itoa(plateau.getBall().getNb()));
       lvlup.setCouleurFenetre(BBLACK);
       lvlup.setCouleurBordure(BBLACK);
 
@@ -198,7 +203,7 @@ void myprogram(){
     }
   }while(ch != 'q');
   
-  if(balles<0){
+  if(plateau.getBall().getNb()<0){
     
     Window GO(1,11,plateau.getWin().getWidth()/2-4,4+plateau.getWin().getHeight()/2,' ');
       GO.setCouleurFenetre(BBLACK);

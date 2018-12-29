@@ -1,7 +1,7 @@
 #include "terrain.h"
 using namespace std;
 
-Terrain::Terrain() : win(21,41,1,4,' '), raq(0,win.getHeight()-2,5), ball(0,raq.getY()-1,2), n(0){
+Terrain::Terrain() : win(21,41,1,4,' '), raq(0,win.getHeight()-2,5), ball(0,raq.getY()-1,2,3), n(0){
   raq.setX((win.getWidth()/2)-(raq.getLength()/2));
   ball.setX(raq.getX()+raq.getLength()/2);}
 

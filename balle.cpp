@@ -3,15 +3,17 @@
 #include <string>
 using namespace std;
 
-Balle::Balle(int X, int Y, int d) : x(X), y(Y), dir(d){}
+Balle::Balle(int X, int Y, int d, int n) : x(X), y(Y), dir(d), nb(n){}
 
 int Balle::getX() const{ return x; }
 int Balle::getY() const{ return y; }
 int Balle::getDir() const{ return dir; }
+int Balle::getNb() const{ return nb; }
 
 void Balle::setX(int X){ x=X; }
 void Balle::setY(int Y){ y=Y; }
 void Balle::setDir(int d){ dir=d; }
+void Balle::setNb(int n){ nb=n; }
   
 void Balle::update(){
   switch(dir){

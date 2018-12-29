@@ -1,0 +1,30 @@
+#ifndef __MESSAGE_H
+#define __MESSAGE_H
+#include "terrain.h"
+#include "window.h"
+
+#include <string>
+using namespace std;
+
+class Message{
+private :
+
+int height;
+int width;
+int x;
+int y;
+string msg;
+Color col;
+
+public :
+
+Message(string nom);
+
+void write(int Y, int X, char c);
+void write(int Y, int X, string m);
+void afficher(bool i);
+void clignoter(Color c);
+
+};
+
+#endif
