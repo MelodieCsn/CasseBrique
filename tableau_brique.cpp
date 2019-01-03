@@ -56,11 +56,9 @@ void TableauBrique::erase(int id){
 
 void TableauBrique::abimer(int id){
 
-  if(id>=0 && id<n){
-    if(data[id].getPv()==1)
-      erase(id);
-    else
-      data[id].setPv(data[id].getPv()-1);
-  }
+  if(data[id].getPv()==1)
+    erase(id);
+  else
+    data[id].setPv(data[id].getPv()-1);
 
 }

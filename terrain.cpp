@@ -1,22 +1,29 @@
 #include "terrain.h"
 using namespace std;
 
-Terrain::Terrain() : win(21,41,1,4,' '), raq(0,win.getHeight()-2,5), ball(0,raq.getY()-1,2,3), n(0){
+Terrain::Terrain() : win(21,41,1,4,' '), raq(0,win.getHeight()-2,5), ball(0,raq.getY()-1,2,3), start(false){
   raq.setX((win.getWidth()/2)-(raq.getLength()/2));
   ball.setX(raq.getX()+raq.getLength()/2);}
 
 Window& Terrain::getWin() { return win; }
 Raquette& Terrain::getRaq() { return raq; }
 Balle& Terrain::getBall() { return ball; }
+Score& Terrain::getScore() { return score; }
 TableauBrique& Terrain::getT() { return T; }
+int Terrain::getLvl() const { return lvl; }
+bool Terrain::getStart() const { return start; }
+void Terrain::setStart(bool b){ start=b; }
 
-int Terrain::getN() const { return n; }
-void Terrain::upN() { n++; }
+void Terrain::chargerNiveau(Niveau& level){
+
+  T=level.getT();
+  lvl=level.getLvl();
+
+}
 
 void Terrain::addBrique(Brique& br){
 
   T.push_back(br);
-  upN();
 
 }
 
@@ -24,21 +31,51 @@ void Terrain::addBrique(int X, int Y, int HP){
 
   Brique br(X,Y,HP);
   T.push_back(br);
-  upN();
 
+}
+
+void Terrain::slideRaq(int i){
+
+  if(i<0)
+    for(int j=1;j<=-i;j++)
+      win.print(raq.getX()+raq.getLength()-j,raq.getY(),' ');
+  else
+    for(int k=0;k<i;k++)
+      win.print(raq.getX()+k,raq.getY(),' ');
+  raq.setX(raq.getX()+i);
+  win.print(raq);
+  
+}
+
+void Terrain::slideBall(int i){
+
+  win.print(ball.getX(),ball.getY(),' ');
+  ball.setX(ball.getX()+i);
+  win.print(ball);
+  
 }
 
 void Terrain::print() const{
 
   win.print(raq);
   win.print(ball);
-  for(int i=0;i<n;i++)
+  for(int i=0;i<T.getN();i++)
     win.print(T.at(i));
 
 }
 
 
+void Terrain::reset(){
 
+  win.print(raq.getX(),raq.getY(),"     ");
+  raq.setX((win.getWidth()/2)-(raq.getLength()/2));
+
+  win.print(ball.getX(),ball.getY(),' ');
+  ball.setX(raq.getX()+raq.getLength()/2);
+  ball.setY(raq.getY()-1);
+  ball.setDir(2);
+	
+}
 
 
 bool Terrain::bord(int X, int Y){
@@ -58,10 +95,23 @@ bool Terrain::bord(int X, int Y){
 
 int Terrain::brique(int X, int Y){
 
-  for(int i=0;i<n;i++)
+  for(int i=0;i<T.getN();i++)
     if(X==T.at(i).getX() && Y==T.at(i).getY())
       return i;
   return -1;
+  
+}
+
+void Terrain::contactBrique(int X, int Y){
+  
+  if(brique(X,Y)>=0){
+
+    if(T.at(brique(X,Y)).getPv()==1)
+      win.print(X,Y,' ');
+    T.abimer(brique(X,Y));
+    score.upScore(1);
+
+  }
   
 }
 
@@ -135,30 +185,18 @@ void Terrain::coin(int i, int j){
   int X=ball.getX(), Y=ball.getY();
   if((bloc(X+i,Y) && bloc(X,Y+j)) || (bloc(X+i,Y+j) && !bloc(X,Y+j) && !bloc(X+i,Y))){
     
-    if(T.at(brique(X+i,Y)).getPv()==1)
-      win.print(X+i,Y,' ');
-    T.abimer(brique(X+i,Y));
-    
-    if(T.at(brique(X+i,Y+j)).getPv()==1)
-      win.print(X+i,Y+j,' ');
-    T.abimer(brique(X+i,Y+j));
-    
-    if(T.at(brique(X,Y+j)).getPv()==1)
-      win.print(X,Y+j,' ');
-    T.abimer(brique(X,Y+j));
+    contactBrique(X+i,Y);
+    contactBrique(X+i,Y+j);
+    contactBrique(X,Y+j);
     
     coin2(1,i,j);
   }
   else if(bloc(X,Y+j)){
-    if(T.at(brique(X,Y+j)).getPv()==1)
-      win.print(X,Y+j,' ');
-    T.abimer(brique(X,Y+j));
+    contactBrique(X,Y+j);
     coin2(2,i,j);
   }
   else if(bloc(X+i,Y)){
-    if(T.at(brique(X+i,Y)).getPv()==1)
-      win.print(X+i,Y,' ');
-    T.abimer(brique(X+i,Y));
+    contactBrique(X+i,Y);
     coin2(3,i,j);
   }
 }
@@ -171,9 +209,7 @@ void Terrain::rebond(){
     break;
   case 2:
     if(bloc(ball.getX(),ball.getY()-1)){
-      if(T.at(brique(ball.getX(),ball.getY()-1)).getPv()==1)
-	win.print(ball.getX(),ball.getY()-1,' ');
-      T.abimer(brique(ball.getX(),ball.getY()-1));
+      contactBrique(ball.getX(),ball.getY()-1);
       ball.setDir(5);
     }
     break;
@@ -207,9 +243,7 @@ void Terrain::rebond(){
 	
       }
       else{
-	if(T.at(brique(ball.getX(),ball.getY()+1)).getPv()==1)
-	win.print(ball.getX(),ball.getY()+1,' ');
-	T.abimer(brique(ball.getX(),ball.getY()+1));
+        contactBrique(ball.getX(),ball.getY()+1);
 	ball.setDir(2);
       }
     }

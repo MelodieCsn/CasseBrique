@@ -3,25 +3,22 @@
 #include "terrain.h"
 #include "window.h"
 
-#include <string>
-using namespace std;
-
 class Message{
  private :
 
-  Window& win;
-  string msg;
+  Window win;
   Color col;
   
  public :
   
-  Message(Terrain p, string nom);
+  Message(Terrain& p, string nom);
   
-  void write(int Y, int X, char c);
-  void write(int Y, int X, string m);
-  void afficher(bool i);
+  void write(int X, int Y, char c);
+  void write(int X, int Y, string m);
+  void afficher(bool b);
   void clignoter(Color c);
-
 };
+
+char* itoa(int val);
 
 #endif

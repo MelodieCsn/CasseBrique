@@ -1,8 +1,14 @@
-all : test-piece.o terrain.o window.o tableau_brique.o brique.o balle.o raquette.o
+all : test-piece.o message.o terrain.o niveau.o score.o window.o tableau_brique.o brique.o balle.o raquette.o
 	g++ -o main $^ -lncurses
 test-piece.o : test-piece.cpp
 	g++ -o $@ -c $<
+message.o : message.cpp message.h
+	g++ -o $@ -c $<
 terrain.o : terrain.cpp terrain.h
+	g++ -o $@ -c $<
+niveau.o : niveau.cpp niveau.h
+	g++ -o $@ -c $<
+score.o : score.cpp score.h
 	g++ -o $@ -c $<
 window.o : window.cpp window.h
 	g++ -o $@ -c $<

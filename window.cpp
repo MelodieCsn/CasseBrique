@@ -168,10 +168,4 @@ void Window::setCouleurFenetre(Color c){
   update();  
 }
 
-void Window::setPos(int y, int x){
-  wmove(frame,y,x);
-  wrefresh(frame);
-  update();
-}
-
 void Window::clear() const{ werase(win); update(); }
