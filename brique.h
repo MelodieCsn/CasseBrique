@@ -1,42 +1,29 @@
 #ifndef __BRIQUE_H
 #define __BRIQUE_H
-#include <string>
-using namespace std;
-
-enum Couleur {
-  VERT,
-  JAUNE,
-  ROUGE,
-};
-
 
 class Brique{
-
+  
  private:
- unsigned int height, width, x, y, pv;
- Couleur c;
-
   
-
+  int x;
+  int y;
+  int pv;
+  
  public:
+  
   Brique();
-  Brique(unsigned int h,unsigned int w,unsigned int x,unsigned int y, Couleur c);
+  Brique(int X, int Y, int hp);
 
+  int getX() const;
+  int getY() const;
+  int getPv() const;
 
-  unsigned int getX() const;
-  unsigned int getY() const;
-  Couleur getCouleur() const;
-  unsigned int getPv() const;
-  
-  void setX(unsigned int x);
-  void setY(unsigned int y);
-  void setCouleur(Couleur c);
-  void setPv(unsigned int pv);
-  
-  string Couleur2String(Couleur c);
-  
+  void setX(int X);
+  void setY(int Y);
+  void setPv(int hp);
 
 };
- 
+
+  bool identique(const Brique& b1, const Brique& b2);
 
 #endif

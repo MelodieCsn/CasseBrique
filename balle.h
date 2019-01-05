@@ -1,15 +1,28 @@
 #ifndef __BALLE_H
 #define __BALLE_H
 
-class Balle {
- private:
-  unsigned int x,y;
- public:
-  Balle(int x, int y);
-  unsigned int getX() const;
-  unsigned int getY() const;
+class Balle{
+ private :
+  int x;
+  int y;
+  int dir;
+  int nb;
 
-  void setX(unsigned int x);
-  void setY(unsigned int y);
+ public :
+  Balle(int X, int Y, int d, int n);
   
-}
+  int getX() const;
+  int getY() const;
+  int getDir() const;
+  int getNb() const;
+
+  void setX(int X);
+  void setY(int Y);
+  void setDir(int d);
+  void setNb(int n);
+
+  void update();
+
+};
+
+#endif

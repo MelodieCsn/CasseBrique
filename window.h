@@ -1,11 +1,14 @@
 #ifndef __WINDOW_H
 #define __WINDOW_H
+
 extern "C" {
 #include <curses.h>
 }
 #include <string>
 #include "brique.h"
-using namespace std;
+#include "balle.h"
+#include "raquette.h"
+
 // Ensemble de couleurs possibles (fond+texte)
 enum Color {
   WBLACK,  // couleur fond = noir ,   couleur texte = blanc
@@ -15,13 +18,14 @@ enum Color {
   WGREEN,  // couleur fond = vert,    couleur texte = blanc
   WMAGENTA,// couleur fond = magenta, couleur texte = blanc
   WRED,	   // couleur fond = rouge,   couleur texte = blanc
-  BWHITE,  // couleur fond = blanc,   couleur texte = blanc
+  WWHITE,  // couleur fond = blanc,   couleur texte = blanc
   BCYAN,   // couleur fond = cyan,    couleur texte = noir
   BBLUE,   // couleur fond = bleu,    couleur texte = noir
   BYELLOW, // couleur fond = jaune,   couleur texte = noir
   BGREEN,  // couleur fond = vert,    couleur texte = noir 
   BMAGENTA,// couleur fond = magenta, couleur texte = noir
   BRED,    // couleur fond = rouge,   couleur texte = noir
+  BBLACK,  // couleur fond = noir,    couleur texte = noir
 };
 
 
@@ -51,24 +55,27 @@ class Window {
   // fonction permettant d'afficher une variable s de type (string ou char)
   // à la position (x,y) dans la fenetre.
   // si un couleur est spécifié l'affichage utilise cette couleur, sinon la couleur de la fenêtre est utilisée
-  void print(int x, int y, string s, Color c) const;
+  void print(int x, int y, std::string s, Color c) const;
   void print(int x, int y, char s, Color c) const;
-  void print(int x, int y, string s) const;
+  void print(int x, int y, std::string s) const;
   void print(int x, int y, char s) const; 
-  void print(Brique b);
-  void Window::print(Balle ba);
 
+  void print(Balle ball) const;
+  void print(Raquette raq) const;
+  void print(Brique br) const;
   
   // accesseurs
   int getX() const;        // récupère l'abscisse du coin supérieur gauche de la fenêtre 
   int getY() const;        // récupère l'ordonnée du coin supérieur gauche de la fenêtre 
-  int getHauteur() const ; // récupère la hauteur de la fenêtre
-  int getLargeur() const ; // récupère la largeur de la fenêtre
+  int getHeight() const ; // récupère la hauteur de la fenêtre
+  int getWidth() const ; // récupère la largeur de la fenêtre
 
   Color getCouleurBordure() const; // récupère la couleur de la bordure
   Color getCouleurFenetre() const; // récupère la couleur de la fenêtre
   void setCouleurBordure(Color);   // modifie la couleur de la bordure
   void setCouleurFenetre(Color);   // modifie la couleur de la fenêtre (ATTENTION, tout le contenu de la fenêtre prend la couleur)
+
+  void setPos(int y, int x);
 
   void clear() const; // enleve tout le contenu de la fenêtre
 

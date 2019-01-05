@@ -1,8 +1,6 @@
 #include "window.h"
-#include "brique.h"
-#include "balle.h"
-#include <string>
-using namespace std;
+
+
 void init_colors(void)
 {
   start_color();
@@ -13,13 +11,14 @@ void init_colors(void)
   init_pair(WGREEN,   COLOR_WHITE, COLOR_GREEN); 
   init_pair(WMAGENTA, COLOR_WHITE, COLOR_MAGENTA);
   init_pair(WRED,     COLOR_WHITE, COLOR_RED);  
-  init_pair(BWHITE,   COLOR_BLACK, COLOR_WHITE);
+  init_pair(WWHITE,   COLOR_BLACK, COLOR_WHITE);
   init_pair(BCYAN,    COLOR_BLACK, COLOR_CYAN);
   init_pair(BBLUE,    COLOR_BLACK, COLOR_BLUE);
   init_pair(BYELLOW,  COLOR_BLACK, COLOR_YELLOW);  
   init_pair(BGREEN,   COLOR_BLACK, COLOR_GREEN); 
   init_pair(BMAGENTA, COLOR_BLACK, COLOR_MAGENTA);
-  init_pair(BRED,     COLOR_BLACK, COLOR_RED);  
+  init_pair(BRED,     COLOR_BLACK, COLOR_RED);
+  init_pair(BBLACK,   COLOR_BLACK, COLOR_BLACK);
 }
 
 
@@ -51,16 +50,16 @@ void Window::update() const{
 Window::Window(int h,int w, int x, int y, char c)
   : height(h), width(w), startx(x), starty(y), bord(c)
 {
-  colorwin=WCYAN;
-  colorframe=WBLACK;
+  colorwin=WBLACK;
+  colorframe=WCYAN;
   frame=newwin(h+2,w+2,y,x);
   win=subwin(frame,h,w,y+1,x+1);
-  wbkgd(frame,COLOR_PAIR(colorwin));
-  wbkgd(win,COLOR_PAIR(colorframe));
-  wborder(frame, c,c,c,c,c,c,c,c);
-  wattron(win,COLOR_PAIR(colorwin));
+  wbkgd(frame,COLOR_PAIR(colorframe));
+  wbkgd(win,COLOR_PAIR(colorwin));
   wattron(frame,COLOR_PAIR(colorframe));
+  wattron(win,COLOR_PAIR(colorwin));
   update();
+  wborder(frame,c,c,c,c,c,c,c,c);
 }
 
 Window::~Window(){
@@ -92,28 +91,68 @@ void Window::print(int x, int y, char s) const{
   mvwaddch(win,y,x,s);
   update();  
 }
-void Window::print(Brique b){   
-  Couleur c=b.getCouleur(); 
-  int x=b.getX();
-  int y=b.getY();
-  wattron(win,c);
-  mvwprintw(win,y,x,"+++");
-  wattroff(win,c);
+
+void Window::print(Balle ball) const {
+  char* ch="@";
+  int x=ball.getX();
+  int y=ball.getY();
+  wattron(win,COLOR_PAIR(WBLACK));
+  mvwprintw(win,y,x,ch);
+  wattroff(win,COLOR_PAIR(WBLACK));
+  update();  
+}
+
+void Window::print(Raquette raq) const {
+  char* ch=" ";
+  int x=raq.getX();
+  int y=raq.getY();
+  wattron(win,COLOR_PAIR(WCYAN));
+  mvwprintw(win,y,x,ch);
+  mvwprintw(win,y,x+raq.getLength()-1,ch);
+  wattroff(win,COLOR_PAIR(WCYAN));
+  for(int i=x+1;i<x+raq.getLength()-1;i++){
+    wattron(win,COLOR_PAIR(WBLUE));
+    mvwprintw(win,y,i,ch);
+    wattroff(win,COLOR_PAIR(WBLUE));
+    }
   update();
 }
 
-void Window::print(Balle ba){
-  mvwprintw(win,ba.getY(),ba.getX(),"@");
-  update();
-}
+void Window::print(Brique br) const {
+    char* ch=" ";
+    int x=br.getX();
+    int y=br.getY();
+    Color col;
+    switch(br.getPv()){
+    case 1:
+      col = WRED;
+      break;
+    case 2:
+      col = WYELLOW;
+      break;
+    case 3:
+      col = WGREEN;
+      break;
+    case 4:
+    col = WBLUE;
+    break;
+    case 5:
+      col = WMAGENTA;
+      break;
+    }
+    wattron(win,COLOR_PAIR(col));
+    mvwprintw(win,y,x,ch);
+    wattroff(win,COLOR_PAIR(col));
+    update();  
+  }
 
 
 
 
 int Window::getX() const { return startx;} 
 int Window::getY() const { return starty;} 
-int Window::getHauteur() const { return height;} 
-int Window::getLargeur() const { return width;}  
+int Window::getHeight() const { return height;} 
+int Window::getWidth() const { return width;}  
 Color Window::getCouleurBordure() const{ return colorframe;}
 Color Window::getCouleurFenetre() const{ return colorwin;}
 void Window::setCouleurBordure(Color c){
@@ -129,5 +168,10 @@ void Window::setCouleurFenetre(Color c){
   update();  
 }
 
-void Window::clear() const{  werase(win); update(); 
+void Window::setPos(int y, int x){
+  wmove(frame,y,x);
+  wrefresh(frame);
+  update();
 }
+
+void Window::clear() const{ werase(win); update(); }

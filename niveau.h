@@ -5,7 +5,7 @@ using namespace std;
 
 class Niveau {
     private:
-    unsigned int nbBriques;
+    unsigned int pvBriques;
     unsigned int nbLignes;
     unsigned int espaceBrique;
 
@@ -16,12 +16,12 @@ class Niveau {
     
 
     //accesseurs en ecriture
-    unsigned int getNbBriques() const;
+    unsigned int getpvBriques() const;
     unsigned int getNbLignes() const;
     unsigned int getEspaceBrique() const;
 
     // accesseurs en lecture
-    void setNbBriques(unsigned int nbB);
+    void setpvBriques(unsigned int nbB);
     void setNbLignes(unsigned int nbL);
     void setEspaceBrique(unsigned int espB);
 
