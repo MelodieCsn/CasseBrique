@@ -1,0 +1,74 @@
+#include "menu.h"
+
+Menu::Menu() : win(20,30,1,15,' '), x(1), y(1), place('m'), b(true){
+
+  win.setCouleurBordure(WWHITE);
+  
+  //win.print(x,y,string,color);
+  win.print(x,y,'x',WCYAN);
+  win.print(3,1,"Nouvelle partie",BWHITE);
+  win.print(3,3,"Titre clignotant");
+  win.print(3,5,"Quitter");
+
+}
+
+Window& Menu::getWin(){ return win; }
+
+int Menu::getX() const { return x; }
+int Menu::getY() const { return y; }
+char Menu::getPlace() const { return place; }
+bool Menu::getB() const { return b; }
+void Menu::setY(int Y){ y=Y; }
+
+void Menu::down(){
+  switch(y){
+  case 1:
+    win.print(x,y,' ');
+    y+=2;
+    win.print(x,y,'x',WCYAN);
+    win.print(3,1,"Nouvelle partie");
+    win.print(3,3,"Titre clignotant",BWHITE);
+    break;
+  case 3:
+    win.print(x,y,' ');
+    y+=2;
+    win.print(x,y,'x',WCYAN);
+    win.print(3,3,"Titre clignotant");
+    win.print(3,5,"Quitter ... ?",BWHITE);
+    break;
+  }
+}
+
+void Menu::up(){
+  switch(y){
+  case 3:
+    win.print(x,y,' ');
+    y-=2;
+    win.print(x,y,'x',WCYAN);
+    win.print(3,1,"Nouvelle partie",BWHITE);
+    win.print(3,3,"Titre clignotant");
+    break;
+  case 5:
+    win.print(x,y,' ');
+    y-=2;
+    win.print(x,y,'x',WCYAN);
+    win.print(3,3,"Titre clignotant",BWHITE);
+    win.print(3,5,"Quitter      ");
+    break;
+  }
+}
+
+void Menu::choose(){
+  switch(y){
+  case 1:
+    b=false;
+    break;
+  case 3:
+    
+    break;
+  case 5:
+    b=false;
+    break;
+  }
+}
+

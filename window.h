@@ -8,6 +8,7 @@ extern "C" {
 #include "brique.h"
 #include "balle.h"
 #include "raquette.h"
+#include "lettre.h"
 
 // Ensemble de couleurs possibles (fond+texte)
 enum Color {
@@ -26,6 +27,7 @@ enum Color {
   BMAGENTA,// couleur fond = magenta, couleur texte = noir
   BRED,    // couleur fond = rouge,   couleur texte = noir
   BBLACK,  // couleur fond = noir,    couleur texte = noir
+  BWHITE,  // couleur fond = noir,    couleur texte = blanc
 };
 
 
@@ -63,6 +65,8 @@ class Window {
   void print(Balle ball) const;
   void print(Raquette raq) const;
   void print(Brique br) const;
+
+  void print(Lettre lettre, Color c) const;
   
   // accesseurs
   int getX() const;        // récupère l'abscisse du coin supérieur gauche de la fenêtre 

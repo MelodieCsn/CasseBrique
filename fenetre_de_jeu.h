@@ -3,6 +3,7 @@
 
 #include "terrain.h"
 #include "message.h"
+#include "niveau.h"
 
 class FenetreDeJeu{
  private:
@@ -16,7 +17,7 @@ class FenetreDeJeu{
 
  public:
 
-  FenetreDeJeu();
+  FenetreDeJeu(Niveau n);
   
   Terrain& getPlateau();
   Message& getTitre();
@@ -25,4 +26,6 @@ class FenetreDeJeu{
   Message& getLevelup();
   Message& getGameover();
 
-}
+};
+
+#endif

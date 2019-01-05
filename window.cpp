@@ -1,5 +1,5 @@
 #include "window.h"
-
+#include <list>
 
 void init_colors(void)
 {
@@ -19,6 +19,7 @@ void init_colors(void)
   init_pair(BMAGENTA, COLOR_BLACK, COLOR_MAGENTA);
   init_pair(BRED,     COLOR_BLACK, COLOR_RED);
   init_pair(BBLACK,   COLOR_BLACK, COLOR_BLACK);
+  init_pair(BWHITE,   COLOR_BLACK, COLOR_WHITE);
 }
 
 
@@ -119,34 +120,52 @@ void Window::print(Raquette raq) const {
 }
 
 void Window::print(Brique br) const {
-    char* ch=" ";
-    int x=br.getX();
-    int y=br.getY();
-    Color col;
-    switch(br.getPv()){
-    case 1:
-      col = WRED;
-      break;
-    case 2:
-      col = WYELLOW;
-      break;
-    case 3:
-      col = WGREEN;
-      break;
-    case 4:
+  char* ch=" ";
+  int x=br.getX();
+  int y=br.getY();
+  Color col;
+  switch(br.getPv()){
+  case 1:
+    col = WRED;
+    break;
+  case 2:
+    col = WYELLOW;
+    break;
+  case 3:
+    col = WGREEN;
+    break;
+  case 4:
     col = WBLUE;
     break;
-    case 5:
-      col = WMAGENTA;
-      break;
-    }
-    wattron(win,COLOR_PAIR(col));
-    mvwprintw(win,y,x,ch);
-    wattroff(win,COLOR_PAIR(col));
-    update();  
+  case 5:
+    col = WMAGENTA;
+    break;
   }
+  wattron(win,COLOR_PAIR(col));
+  mvwprintw(win,y,x,ch);
+  wattroff(win,COLOR_PAIR(col));
+  update();  
+}
 
-
+void Window::print(Lettre lettre, Color c) const {
+  char* ch=" ";
+  unsigned long long int i=lettre.getForme();
+  int x=lettre.getX();
+  int y=lettre.getY();
+  while(i>0){
+    if(x==lettre.getX()+lettre.getWidth()){
+      x=lettre.getX();
+      y+=1;
+    }
+    wattron(win,COLOR_PAIR(c));
+    if((i%10)!=0)
+      mvwprintw(win,y,x,ch);
+    wattroff(win,COLOR_PAIR(c));
+    update();
+    i=i/10;
+    x+=1;
+  }
+}
 
 
 int Window::getX() const { return startx;} 

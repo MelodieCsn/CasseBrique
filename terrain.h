@@ -47,6 +47,7 @@ class Terrain{
   void reset();
 
   bool bord(int X, int Y);
+  bool bordBas(int X, int Y);
 
   int brique(int X, int Y);
   void contactBrique(int X, int Y);
@@ -57,10 +58,10 @@ class Terrain{
 
   bool bloc(int X, int Y);
 
-  void coin2(int k, int i, int j);
-  void coin(int i, int j);
+  void direction(int k, int i, int j);
+  void rebond(int i, int j);
 
-  void rebond();
+  void update();
 };
 
 #endif

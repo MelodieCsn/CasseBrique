@@ -46,6 +46,12 @@ void TableauBrique::push_back(const Brique& br){
   n++;
 }
 
+bool TableauBrique::estVide(){
+  if(n==0)
+    return true;
+  return false;
+}
+
 void TableauBrique::erase(int id){
 
   for(int i=id;i<n;i++)

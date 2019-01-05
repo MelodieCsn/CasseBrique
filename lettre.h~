@@ -1,0 +1,17 @@
+#ifndef __LETTRE_H
+#define __LETTRE_H
+#include "window.h"
+
+class Lettre{
+ private :
+  int height;
+  int width;
+  unsigned long long int forme;
+
+ public :
+
+  Lettre(char ch);
+
+};
+
+#endif

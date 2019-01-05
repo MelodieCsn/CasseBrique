@@ -28,6 +28,7 @@ class TableauBrique{
   void push_back(const Brique& br);
   void erase(int id);
 
+  bool estVide();
   void abimer(int id);
 
 };

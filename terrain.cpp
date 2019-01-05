@@ -1,7 +1,7 @@
 #include "terrain.h"
 using namespace std;
 
-Terrain::Terrain() : win(21,41,1,4,' '), raq(0,win.getHeight()-2,5), ball(0,raq.getY()-1,2,3), start(false){
+Terrain::Terrain() : win(21,41,1,4,' '), raq(0,win.getHeight()-2,5), ball(0,raq.getY()-1,2,3), lvl(0), start(false){
   raq.setX((win.getWidth()/2)-(raq.getLength()/2));
   ball.setX(raq.getX()+raq.getLength()/2);}
 
@@ -93,6 +93,14 @@ bool Terrain::bord(int X, int Y){
   
 }
 
+bool Terrain::bordBas(int X, int Y){
+  
+  if(X>=-1 && X<=win.getWidth() && Y==win.getHeight())
+      return true;
+  return false;
+  
+}
+
 int Terrain::brique(int X, int Y){
 
   for(int i=0;i<T.getN();i++)
@@ -131,7 +139,7 @@ bool Terrain::bloc(int X, int Y){
   return (bord(X,Y) || palette(X,Y) || brique(X,Y)>-1);
 }
 
-void Terrain::coin2(int k, int i, int j){
+void Terrain::direction(int k, int i, int j){
 
   switch(k){
   case 1:
@@ -180,7 +188,7 @@ void Terrain::coin2(int k, int i, int j){
   
 }
   
-void Terrain::coin(int i, int j){
+void Terrain::rebond(int i, int j){
   
   int X=ball.getX(), Y=ball.getY();
   if((bloc(X+i,Y) && bloc(X,Y+j)) || (bloc(X+i,Y+j) && !bloc(X,Y+j) && !bloc(X+i,Y))){
@@ -189,23 +197,23 @@ void Terrain::coin(int i, int j){
     contactBrique(X+i,Y+j);
     contactBrique(X,Y+j);
     
-    coin2(1,i,j);
+    direction(1,i,j);
   }
   else if(bloc(X,Y+j)){
     contactBrique(X,Y+j);
-    coin2(2,i,j);
+    direction(2,i,j);
   }
   else if(bloc(X+i,Y)){
     contactBrique(X+i,Y);
-    coin2(3,i,j);
+    direction(3,i,j);
   }
 }
   
-void Terrain::rebond(){
+void Terrain::update(){
   
   switch(ball.getDir()){
   case 1:
-    coin(-1,-1);
+    rebond(-1,-1);
     break;
   case 2:
     if(bloc(ball.getX(),ball.getY()-1)){
@@ -214,13 +222,17 @@ void Terrain::rebond(){
     }
     break;
   case 3:
-    coin(1,-1);
+    rebond(1,-1);
     break;
   case 4:
     if(bordPaletteD(ball.getX(),ball.getY()+1))
       ball.setDir(2);
-    else
-      coin(-1,1);
+    else if(bordBas(ball.getX(),ball.getY()+1)){
+      reset();
+      ball.setNb(ball.getNb()-1);
+      start=false;
+    }else
+      rebond(-1,1);
     break;
   case 5:
     if(bloc(ball.getX(),ball.getY()+1)){
@@ -242,7 +254,11 @@ void Terrain::rebond(){
 	  ball.setDir(3);
 	
       }
-      else{
+      else if(bordBas(ball.getX(),ball.getY()+1)){
+	reset();
+	ball.setNb(ball.getNb()-1);
+	start=false;
+      }else{
         contactBrique(ball.getX(),ball.getY()+1);
 	ball.setDir(2);
       }
@@ -251,11 +267,19 @@ void Terrain::rebond(){
   case 6:
     if(bordPaletteG(ball.getX(),ball.getY()+1))
       ball.setDir(2);
-    else
-      coin(1,1);
+    else if(bordBas(ball.getX(),ball.getY()+1)){
+      reset();
+      ball.setNb(ball.getNb()-1);
+      start=false;
+    }else
+      rebond(1,1);
     break;
 
-   }
+  }
+  if(start){
+    win.print(ball.getX(),ball.getY(),' ');
+    ball.update();    
+  }
 }
 
 /* 
