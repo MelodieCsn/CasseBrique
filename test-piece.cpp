@@ -36,9 +36,9 @@ void myprogram(char* arg){
   int ch;
   int lvl=1;
   int score=0;
+  // Création d'un objet de la classe config et extraction des informations dans le fichier de configuration
   Config cfg;
   cfg.loadConfig(arg);
-  
   Terrain plateau;
 
   // Brique b1(3,5,1);
@@ -57,7 +57,6 @@ void myprogram(char* arg){
 
 Niveau n(cfg.pvBriques, cfg.nbLignes, cfg.espaceBriques);
 Brique b(1,1,n.getpvBriques());
-//Niveau n(6, 6, 1);
 int cpt =0;
 for(int ligne=0; ligne<n.getNbLignes(); ligne++){
   while(cpt<plateau.getWin().getWidth()){
