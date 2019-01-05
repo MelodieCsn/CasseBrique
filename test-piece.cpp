@@ -5,6 +5,7 @@
 #include "balle.h"
 #include "raquette.h"
 #include "config.h"
+#include "tableau_niveau.h"
 #include "niveau.h"
 #include <cstring>
 #include <unistd.h>
@@ -36,9 +37,8 @@ void myprogram(char* arg){
   int ch;
   int lvl=1;
   int score=0;
-  // Création d'un objet de la classe config et extraction des informations dans le fichier de configuration
-  Config cfg;
-  cfg.loadConfig(arg);
+  
+  
   Terrain plateau;
 
   // Brique b1(3,5,1);
@@ -55,22 +55,38 @@ void myprogram(char* arg){
  
  // AFFICHAGE NIVEAU
 
-Niveau n(cfg.pvBriques, cfg.nbLignes, cfg.espaceBriques);
-Brique b(1,1,n.getpvBriques());
+//Niveau n(cfg.pvBriques, cfg.nbLignes, cfg.espaceBriques);
+//Brique b(1,1,n.getpvBriques());
+//Niveau n(6, 6, 1);
+Config cfg;
+cfg.loadConfig(arg);
+TableauNiveau tabNiv();
+Brique b(1,1,tabNiv.at(0).getpvBriques());
+
+// int cpt =0;
+// for(int ligne=0; ligne<n.getNbLignes(); ligne++){
+//   while(cpt<plateau.getWin().getWidth()){
+//     plateau.addBrique(b);
+//     b.setX(b.getX()+n.getEspaceBriques());
+//     cpt=cpt+1+n.getEspaceBriques();
+//   }
+//   b.setY(b.getY()+2);
+//   cpt=0;
+//   b.setX(1);
+// }
+
+
 int cpt =0;
-for(int ligne=0; ligne<n.getNbLignes(); ligne++){
+for(int ligne=0; ligne<tabNiv.at(0).getNbLignes(); ligne++){
   while(cpt<plateau.getWin().getWidth()){
     plateau.addBrique(b);
-    b.setX(b.getX()+n.getEspaceBrique());
-    cpt=cpt+1+n.getEspaceBrique();
+    b.setX(b.getX()+tabNiv.at(0).getEspaceBriques());
+    cpt=cpt+1+tabNiv.at(0).getEspaceBriques();
   }
   b.setY(b.getY()+2);
   cpt=0;
   b.setX(1);
 }
-
-
-
 
 
 

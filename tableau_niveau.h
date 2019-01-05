@@ -17,7 +17,7 @@ class TableauNiveau{
     Niveau& at(int i);
     const Niveau& at(int i) const;
 
-    int getN() const;
+    int getN()const;
     void erase(int id);
 
 };

@@ -6,8 +6,8 @@ Niveau::Niveau(unsigned int nbB, unsigned int nbL, unsigned int espB) : pvBrique
 
 unsigned int Niveau::getpvBriques() const {return pvBriques ;}
 unsigned int Niveau::getNbLignes() const {return nbLignes;}
-unsigned int Niveau::getEspaceBrique() const {return espaceBrique;}
+unsigned int Niveau::getEspaceBriques() const {return espaceBrique;}
 
-void Niveau::setpvBriques(unsigned int nbB) {this->pvBriques=nbB;}
+void Niveau::setPvBriques(unsigned int nbB) {this->pvBriques=nbB;}
 void Niveau::setNbLignes(unsigned int nbL){this->nbLignes=nbL;}
-void Niveau::setEspaceBrique(unsigned int espB) {this->espaceBrique=espB;}
+void Niveau::setEspaceBriques(unsigned int espB) {this->espaceBrique=espB;}

@@ -14,7 +14,7 @@ TableauNiveau::~TableauNiveau(){ delete[] data; }
 Niveau& TableauNiveau::at(int i){ return data[i]; }
 const Niveau& TableauNiveau::at(int i) const { return data[i]; }
 
-int TableauNiveau::getN() const {return n;}
+int getN() const {return n;}
 
 void TableauNiveau::erase(int id){
 

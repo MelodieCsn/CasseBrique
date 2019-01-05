@@ -1,13 +1,15 @@
 niveau:1
-nbLignes : 4
+#nombre de lignes voulues
+nbLignes1 : 4
 #L'espace entre les briques
-espaceBriques :6
+espaceBriques1 :6
 #les points de vie d'une brique
-pvBriques:1
+pvBriques1:1
 
 niveau:2
-nbLignes : 8
+#nombre de lignes voulues
+nbLignes2 : 8
 #L'espace entre les briques
-espaceBriques :2
+espaceBriques2 :2
 #les points de vie d'une brique
-pvBriques:2
+pvBriques2:2
