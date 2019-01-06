@@ -2,12 +2,14 @@
 #define __MENU_H
 #include "window.h"
 #include "title.h"
+#include "classement.h"
 
 class Menu{
  private :
 
   Window win;
   Title title;
+  Classement cls;
   int x;
   int y;
   char place;
@@ -18,6 +20,7 @@ class Menu{
   Menu();
 
   Window& getWin();
+  Classement& getCls();
 
   int getX() const;
   int getY() const;

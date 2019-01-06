@@ -1,4 +1,5 @@
 #include "terrain.h"
+#include <iostream>
 using namespace std;
 
 Terrain::Terrain() : win(21,41,1,4,' '), raq(0,win.getHeight()-2,5), ball(0,raq.getY()-1,2,3), lvl(0), start(false){
@@ -16,21 +17,18 @@ void Terrain::setStart(bool b){ start=b; }
 
 void Terrain::chargerNiveau(Niveau& level){
 
+  for(int i=0;i<level.getT().getN();i++){
+    if( level.getT().at(i).getX()>=win.getWidth() || level.getT().at(i).getX()<0 || level.getT().at(i).getY()<0 || level.getT().at(i).getY()>=win.getHeight() ){
+      cerr<<"Le niveau à charger contient une brique hors terrain. Arrêt."<<endl;
+      terminate();
+    }
+    if( level.getT().at(i).getY()>=raq.getY()-5 ){
+      cerr<<"Le niveau à charger contient une brique trop proche de la raquette ( 5 blocs en hauteur minimum ). Arrêt."<<endl;
+      terminate();
+    }
+  }
   T=level.getT();
   lvl=level.getLvl();
-
-}
-
-void Terrain::addBrique(Brique& br){
-
-  T.push_back(br);
-
-}
-
-void Terrain::addBrique(int X, int Y, int HP){
-
-  Brique br(X,Y,HP);
-  T.push_back(br);
 
 }
 

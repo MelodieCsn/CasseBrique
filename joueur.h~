@@ -1,0 +1,20 @@
+#ifndef __JOUEUR_H
+#define __JOUEUR_H
+#include <string>
+using namespace std;
+
+class Joueur {
+
+    private:
+    string nom;
+
+    public:
+    joueur();
+    joueur(string s);
+
+    string getNom() const;
+    void setNom(string s);
+    void askNom();
+};
+
+#endif

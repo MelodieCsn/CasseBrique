@@ -37,9 +37,6 @@ class Terrain{
 
   void chargerNiveau(Niveau& lvl);
   
-  void addBrique(Brique& br);
-  void addBrique(int X, int Y, int HP);
-
   void slideRaq(int i);
   void slideBall(int i);
 

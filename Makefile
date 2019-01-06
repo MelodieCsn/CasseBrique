@@ -1,10 +1,12 @@
-all : test-piece.o fenetre_de_jeu.o menu.o title.o lettre.o message.o terrain.o niveau.o score.o window.o tableau_brique.o brique.o balle.o raquette.o
+all : test-piece.o fenetre_de_jeu.o menu.o classement.o title.o lettre.o message.o terrain.o niveau.o score.o window.o tableau_brique.o brique.o balle.o raquette.o
 	g++ -o main $^ -lncurses
 test-piece.o : test-piece.cpp
 	g++ -o $@ -c $<
 fenetre_de_jeu.o : fenetre_de_jeu.cpp fenetre_de_jeu.h
 	g++ -o $@ -c $<
 menu.o : menu.cpp menu.h
+	g++ -o $@ -c $<
+classement.o : classement.cpp classement.h
 	g++ -o $@ -c $<
 title.o : title.cpp title.h
 	g++ -o $@ -c $<
