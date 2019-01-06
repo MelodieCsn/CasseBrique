@@ -1,0 +1,10 @@
+# FICHIER DE CONFIGURATION DU NIVEAU 2 DU CASSE-BRIQUE
+
+#nombres de lignes désirées dans le terrain, nombre entier
+nbLignes : 3 #si on met un dièse sur la méme ligne il sera quand même enlevé
+
+#L'espace entre les briques, nombre entier
+espaceBriques :3
+
+#les points de vie de toutes les briques du niveau, nombre entier
+pvBriques:4

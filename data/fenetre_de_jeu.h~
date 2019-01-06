@@ -1,0 +1,43 @@
+#ifndef FENETRE_DE_JEU_H
+#define FENETRE_DE_JEU_H
+
+#include "terrain.h"
+#include "message.h"
+#include "niveau.h"
+
+class FenetreDeJeu{
+  
+ private:
+
+  Terrain plateau;
+  Message titre;
+  Message infos;
+  Message help;
+  Message levelup;
+  Message gameover;
+
+ public:
+
+  FenetreDeJeu(); // Crée toute la fenêtre de jeu ( plateau et messages )
+
+  void chargerNiveau(Niveau n); // Charge un niveau, l'affiche et affiche son numéro dans infos
+  
+  Terrain& getPlateau();  // Renvoie le plateau (modifiable)
+  Message& getTitre();    // Renvoie le titre (modifiable)
+  Message& getInfos();    // Renvoie les infos (modifiable)
+  Message& getHelp();     // Renvoie l'aide  (modifiable)
+  Message& getLevelup();  // Renvoie le "level up" (modifiable)
+  Message& getGameover(); // Renvoie le "game over" (modifiable)
+
+  void start();
+  void aide();
+  void moveG5();
+  void moveG1();
+  void moveD1();
+  void moveD5();
+
+  void update();
+  void nouveauNiveau(Niveau n);
+};
+
+#endif

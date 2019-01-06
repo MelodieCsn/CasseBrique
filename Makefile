@@ -1,32 +1,34 @@
-all : test-piece.o fenetre_de_jeu.o menu.o classement.o title.o lettre.o message.o terrain.o niveau.o score.o window.o tableau_brique.o brique.o balle.o raquette.o
+all : data/main.o data/config.o data/menu.o data/title.o data/lettre.o data/classement.o data/fenetre_de_jeu.o data/message.o data/terrain.o data/niveau.o data/tableau_brique.o data/brique.o data/balle.o data/raquette.o data/score.o data/window.o
 	g++ -o main $^ -lncurses
-test-piece.o : test-piece.cpp
+data/main.o : data/main.cpp
 	g++ -o $@ -c $<
-fenetre_de_jeu.o : fenetre_de_jeu.cpp fenetre_de_jeu.h
+data/config.o : data/config.cpp data/config.h
 	g++ -o $@ -c $<
-menu.o : menu.cpp menu.h
+data/menu.o : data/menu.cpp data/menu.h
 	g++ -o $@ -c $<
-classement.o : classement.cpp classement.h
+data/title.o : data/title.cpp data/title.h
 	g++ -o $@ -c $<
-title.o : title.cpp title.h
+data/lettre.o : data/lettre.cpp data/lettre.h
 	g++ -o $@ -c $<
-lettre.o : lettre.cpp lettre.h
+data/classement.o : data/classement.cpp data/classement.h
 	g++ -o $@ -c $<
-message.o : message.cpp message.h
+data/fenetre_de_jeu.o : data/fenetre_de_jeu.cpp data/fenetre_de_jeu.h
 	g++ -o $@ -c $<
-terrain.o : terrain.cpp terrain.h
+data/message.o : data/message.cpp data/message.h
 	g++ -o $@ -c $<
-niveau.o : niveau.cpp niveau.h
+data/terrain.o : data/terrain.cpp data/terrain.h
 	g++ -o $@ -c $<
-score.o : score.cpp score.h
+data/niveau.o : data/niveau.cpp data/niveau.h
 	g++ -o $@ -c $<
-window.o : window.cpp window.h
+data/tableau_brique.o : data/tableau_brique.cpp data/tableau_brique.h
 	g++ -o $@ -c $<
-tableau_brique.o : tableau_brique.cpp tableau_brique.h
+data/brique.o : data/brique.cpp data/brique.h
 	g++ -o $@ -c $<
-brique.o : brique.cpp brique.h
+data/balle.o : data/balle.cpp data/balle.h
 	g++ -o $@ -c $<
-balle.o : balle.cpp balle.h
+data/raquette.o : data/raquette.cpp data/raquette.h
 	g++ -o $@ -c $<
-raquette.o : raquette.cpp raquette.h
+data/score.o : data/score.cpp data/score.h
+	g++ -o $@ -c $<
+data/window.o : data/window.cpp data/window.h
 	g++ -o $@ -c $<
