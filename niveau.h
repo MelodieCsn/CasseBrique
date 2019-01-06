@@ -7,7 +7,7 @@ class Niveau {
     private:
     unsigned int pvBriques;
     unsigned int nbLignes;
-    unsigned int espaceBriques;
+    unsigned int espaceBrique;
 
     public:
     // constructeurs/destructeur
@@ -16,14 +16,14 @@ class Niveau {
     
 
     //accesseurs en ecriture
-    unsigned int getPvBriques() const;
+    unsigned int getpvBriques() const;
     unsigned int getNbLignes() const;
-    unsigned int getEspaceBriques() const;
+    unsigned int getEspaceBrique() const;
 
     // accesseurs en lecture
     void setpvBriques(unsigned int nbB);
     void setNbLignes(unsigned int nbL);
-    void setEspaceBriques(unsigned int espB);
+    void setEspaceBrique(unsigned int espB);
 
 
 };

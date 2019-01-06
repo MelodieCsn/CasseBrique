@@ -1,16 +1,15 @@
 #ifndef __CONFIG_H
 #define __CONFIG_H
 using namespace std;
-#include "tableau_niveau.h"
+
 #include <string>
 
 class Config{
     private:
     
     public:
-    TableauNiveau tabNiv;
+    unsigned int pvBriques, nbLignes, espaceBriques;
     Config(); 
-    //TableauNiveau& const getTableauNiveau();
     void loadConfig(string file);
     void nettoie(string &s);
     bool findCleVal(string &s, string &s1, string &s2);

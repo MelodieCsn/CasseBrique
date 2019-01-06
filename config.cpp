@@ -5,12 +5,11 @@
 #include <exception>
 using namespace std;
 #include "config.h"
-#include "tableau_niveau.h"
 
-Config::Config() : TableauNiveau(NULL,0) {}
+Config::Config() : pvBriques(1), nbLignes(1), espaceBriques(2) {}
 //Config::Config( unsigned int nbB, unsigned int nbL, unsigned int espB) : pvBriques(nbB), nbLignes(nbL), espaceBrique(espB) {}
 
-//TableauNiveau& Config::getTableauNiveau() const {return TabNiv;}
+
 
 void Config::nettoie(std::string &s){
   size_t pos=s.find_first_of("#");
@@ -36,30 +35,19 @@ bool Config::findCleVal(std::string &s, std::string &s1,std::string &s2){
   //cout<<"Found cle/val -> "<< s1<< " and "<<s2<<endl;
   return true;
 }
+
 void Config::TraiteOption(const string &cle, const string &valeur, size_t num_ligne){
-  if(cle == "niveau" && valeur == "1"){
-    if (cle == "pvBriques1") {
-    tabNiv.at(0).getPvBriques() = (atoi(valeur.c_str()));
+  if (cle == "pvBriques") {
+    pvBriques = (atoi(valeur.c_str()));
   }
-  if (cle == "nbLignes1") {
-    tabNiv.at(0).getNbLignes() = (atoi(valeur.c_str()));    
+  if (cle == "nbLignes") {
+    nbLignes = (atoi(valeur.c_str()));    
   }
-  if (cle == "espaceBriques1") {
-    tabNiv.at(0).getEspaceBriques() = (atoi(valeur.c_str()));    
-  }
-}
-  if(cle == "niveau" && valeur == "2"){
-    if (cle == "pvBriques2") {
-    tabNiv.at(1).getPvBriques() = (atoi(valeur.c_str()));
-  }
-  if (cle == "nbLignes2") {
-    tabNiv.at(1).getNbLignes() = (atoi(valeur.c_str()));    
-  }
-  if (cle == "espaceBriques2") {
-    tabNiv.at(1).getEspaceBriques() = (atoi(valeur.c_str()));    
-  }
+  if (cle == "espaceBriques") {
+    espaceBriques = (atoi(valeur.c_str()));    
   }
 }
+
 void Config::loadConfig(std::string file){
   ifstream input(file.c_str());
   string cle, valeur;
